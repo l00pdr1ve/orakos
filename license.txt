@@ -1,0 +1,7 @@
+Copyright © 2025 Orakos
+
+All rights reserved.
+
+This code and its associated content are proprietary and confidential. 
+No part of this repository may be used, copied, modified, or distributed 
+without explicit written permission from the owners of Orakos.

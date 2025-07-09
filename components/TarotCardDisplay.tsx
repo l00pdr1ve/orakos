@@ -1,0 +1,33 @@
+import React from 'react';
+import { SendToEmail } from './SendToEmail';
+import { TarotCard } from '../types';
+
+interface TarotCardDisplayProps {
+    cards: TarotCard[];
+}
+
+const TarotCardDisplay: React.FC<TarotCardDisplayProps> = ({ cards }) => {
+    if (!cards || cards.length === 0) {
+        return null;
+    }
+
+    return (
+        <div className="mb-8 p-4 bg-card/50 rounded-lg shadow-inner border border-border">
+            <h3 className="text-center text-text-secondary text-sm mb-4">Tus cartas para esta lectura:</h3>
+            <div className="flex justify-center items-center gap-4 md:gap-8">
+                {cards.map((card, index) => (
+                    <div key={index} className="text-center transform transition-transform duration-500 hover:scale-105 group">
+                        <img
+                            src={`https://www.trustedtarot.com/img/cards/${card.imageName}.png`}
+                            alt={`Una carta de Tarot: ${card.name}`}
+                            className="w-20 md:w-24 h-auto rounded-lg shadow-lg border-2 border-accent/50 group-hover:border-accent"
+                        />
+                        <p className="mt-2 text-xs md:text-sm text-text-primary">{card.name}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default TarotCardDisplay;
