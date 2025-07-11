@@ -1,18 +1,17 @@
+import { defineConfig } from 'vite';
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
 
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', '');
-  return {
-    base: '/orakos/',
-    define: {
-      'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+// https://vitejs.dev/config/
+export default defineConfig({
+  base: '/orakos/',
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, '.'),
     },
-    resolve: {
-      alias: {
-        '@': path.resolve('.'),
-      }
-    }
-  };
+  },
+  // This define is optional if you use import.meta.env.VITE_... directly in your code
+  // But it can be useful for clarity or for libraries that expect process.env
+  define: {
+    'process.env.VITE_GEMINI_API_KEY': JSON.stringify(process.env.VITE_GEMINI_API_KEY)
+  }
 });

@@ -38,8 +38,9 @@ jobs:
       - name: Build
         run: npm run build
         env:
-            # Pass the secret to the build script
-            GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # This is the crucial step: Pass the secret to the build script 
+          # using the VITE_ prefix so Vite can access it.
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
