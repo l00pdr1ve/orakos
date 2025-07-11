@@ -6,23 +6,41 @@ let aiInstance: GoogleGenAI | null = null;
 
 /**
  * Lazily initializes and returns the GoogleGenAI instance.
- * This ensures the API key is read only when first needed, and only once.
- * Throws an error if the API key is not configured.
+ * This version is "build-safe". It will not throw an error during the build process.
+ * Instead, it allows the app to build, and any potential API key errors will be
+ * handled at runtime by the functions that call this one.
  */
 function getAiInstance(): GoogleGenAI {
     if (!aiInstance) {
         const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
         if (!apiKey) {
-            console.error("VITE_GEMINI_API_KEY is not defined. Check your .env file or repository secrets.");
-            throw new Error("La clave de API de Gemini no está configurada. Por favor, contacta al administrador del sitio.");
+            // Log an error for debugging, but DO NOT throw an error here.
+            // This prevents the build from crashing.
+            console.error("VITE_GEMINI_API_KEY is not defined. The app will build, but API calls will fail at runtime.");
         }
-        aiInstance = new GoogleGenAI({ apiKey });
+
+        // Initialize the SDK. If apiKey is undefined or empty, the SDK will gracefully
+        // fail when an actual API call is made, not during initialization.
+        aiInstance = new GoogleGenAI({ apiKey: apiKey || "" });
     }
     return aiInstance;
 }
 
+/**
+ * Checks if the API is configured. Throws a runtime error if not, which
+ * will be caught by the UI components.
+ */
+function ensureApiIsConfigured() {
+    if (!import.meta.env.VITE_GEMINI_API_KEY) {
+        throw new Error("La clave de API de Gemini no está configurada. Por favor, contacta al administrador del sitio.");
+    }
+}
+
+
 export const startTarotChat = (): Chat => {
-    const ai = getAiInstance(); // Get or create instance
+    ensureApiIsConfigured(); // This will throw a runtime error if the key is missing
+    const ai = getAiInstance();
     const systemInstruction = `Eres 'Aura', una tarotista de IA directa, concisa y honesta que se comunica en español de España. Tu tono es franco y vas directamente al grano pero siendo empática. Tus lecturas se basan únicamente en las tres cartas que la persona te presentará junto con su pregunta.
 
 Tu respuesta DEBE seguir esta estructura estricta:
@@ -56,7 +74,8 @@ Tu respuesta DEBE seguir esta estructura estricta:
 };
 
 export const startLenormandChat = (): Chat => {
-    const ai = getAiInstance(); // Get or create instance
+    ensureApiIsConfigured();
+    const ai = getAiInstance();
     const systemInstruction = `Eres 'Aura', una experta en el oráculo de Lenormand. Te comunicas en español de España de forma directa, práctica y sin rodeos. El sistema Lenormand es conocido por sus respuestas concretas. Tus lecturas se basan únicamente en las tres cartas que se te presentan.
 
 Tu respuesta DEBE seguir esta estructura narrativa y estricta:
@@ -89,6 +108,7 @@ Tu respuesta DEBE seguir esta estructura narrativa y estricta:
 
 
 export const generateAstralChart = async (data: AstralChartData): Promise<string> => {
+    ensureApiIsConfigured();
     const prompt = `
 Eres una persona experta en astrología, de gran sabiduría y empatía. Tu tarea es generar una carta astral personalizada y detallada en español de España. El tono debe ser perspicaz, positivo y empoderador, y el lenguaje siempre de género neutro al referirte a quien consulta.
 
@@ -125,7 +145,7 @@ Un párrafo final que resuma los temas principales de la carta. Ofrece una guía
 Utiliza un lenguaje claro y accesible, evitando la jerga astrológica excesivamente técnica. No incluyas ningún descargo de responsabilidad.`;
 
     try {
-        const ai = getAiInstance(); // Get or create instance
+        const ai = getAiInstance();
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
@@ -153,6 +173,7 @@ export const getIChingInterpretation = async (
     futureHexagram: IChingHexagramInfo | null,
     focus: ReadingFocus
 ): Promise<string> => {
+    ensureApiIsConfigured();
     let prompt = `Eres una mente sabia y experta del I Ching. Tu conocimiento es profundo y tu comunicación es clara y directa. Una persona ha realizado la siguiente pregunta: "${question}".
 
 **Instrucciones clave para tu respuesta:**
@@ -205,7 +226,7 @@ Describe el hexagrama ${futureHexagram.name}. Esto representa hacia dónde se di
 Concluye con un resumen claro y práctico. Sintetiza toda la información para dar una respuesta directa y una guía accionable a la pregunta realizada, centrada en el área de interés de la persona.`;
 
     try {
-        const ai = getAiInstance(); // Get or create instance
+        const ai = getAiInstance();
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
@@ -222,6 +243,7 @@ Concluye con un resumen claro y práctico. Sintetiza toda la información para d
 };
 
 export const generateNumerologyReport = async (data: NumerologyData): Promise<string> => {
+    ensureApiIsConfigured();
     const prompt = `
 Eres una persona experta en numerología, con una voz clara, empática y reveladora. Tu tarea es generar un informe numerológico personalizado y detallado en español de España. El tono debe ser perspicaz y fácil de entender. Utiliza siempre un lenguaje de género neutro.
 
@@ -257,7 +279,7 @@ Un párrafo final que resuma las interacciones entre estos números clave. Ofrec
 Utiliza un lenguaje claro y accesible. No incluyas ningún descargo de responsabilidad.`;
 
     try {
-        const ai = getAiInstance(); // Get or create instance
+        const ai = getAiInstance();
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
@@ -274,6 +296,7 @@ Utiliza un lenguaje claro y accesible. No incluyas ningún descargo de responsab
 };
 
 export const generateEnneagramReport = async (data: EnneagramData): Promise<string> => {
+    ensureApiIsConfigured();
     const prompt = `
 Eres una persona experta en el Eneagrama, con una voz sabia, clara y compasiva. Tu tarea es analizar las respuestas de un cuestionario para identificar el eneatipo más probable de una persona y generar un informe conciso y directo en español de España. El informe total debe ser breve.
 
@@ -310,7 +333,7 @@ Un párrafo final muy corto (2-3 frases) que resuma la esencia de su perfil.
 Sé claro, profundo y extremadamente breve. No incluyas ningún descargo de responsabilidad.`;
 
     try {
-        const ai = getAiInstance(); // Get or create instance
+        const ai = getAiInstance();
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
@@ -327,6 +350,7 @@ Sé claro, profundo y extremadamente breve. No incluyas ningún descargo de resp
 };
 
 export const generateDreamInterpretation = async (data: DreamData): Promise<string> => {
+    ensureApiIsConfigured();
     const prompt = `
 Eres una persona experta en la interpretación de sueños, con profundos conocimientos de la psicología junguiana, los arquetipos universales y el simbolismo onírico. Tu tono es sabio, perspicaz y empático, guiando a la persona que consulta a través de su paisaje interior en español de España. Utiliza un lenguaje de género neutro.
 
@@ -350,7 +374,7 @@ Concluye con 2-3 preguntas abiertas que inviten a la persona a reflexionar sobre
 Mantén un tono de guía, no de predicción. No incluyas ningún descargo de responsabilidad.`;
 
     try {
-        const ai = getAiInstance(); // Get or create instance
+        const ai = getAiInstance();
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
