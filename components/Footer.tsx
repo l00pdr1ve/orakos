@@ -1,17 +1,64 @@
 import React from 'react';
+import { View } from '../types';
 
 interface FooterProps {
-    isFixed?: boolean;
+    navigate: (view: View) => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ isFixed = false }) => {
-    const fixedClasses = 'fixed bottom-0 left-0 right-0 z-10';
+const FooterLinkButton: React.FC<{ onClick: () => void; children: React.ReactNode; lang?: string }> = ({ onClick, children, lang }) => (
+    <button onClick={onClick} lang={lang} className="text-left no-underline border-b border-transparent hover:border-accent focus:border-accent focus:outline-none transition-colors duration-200">
+        {children}
+    </button>
+);
 
+
+const Footer: React.FC<FooterProps> = ({ navigate }) => {
     return (
-        <footer className={`${isFixed ? fixedClasses : 'mt-12'} bg-card/50 backdrop-blur-sm`}>
-            <div className="container mx-auto px-4 py-4 text-center text-text-secondary">
-                <p className="text-sm">&copy; {new Date().getFullYear()} Orakos. Solo para fines de entretenimiento.</p>
-                <p className="text-xs mt-1">Creado con cariño en España.</p>
+        <footer className="bg-primary text-background font-sans text-base leading-relaxed pt-12 px-6 pb-8 mt-auto">
+            <div className="container mx-auto max-w-4xl">
+                <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-8 mb-8">
+                    {/* Legal Column */}
+                    <div>
+                        <h4 className="text-lg font-bold mb-3">Legal</h4>
+                        <ul className="space-y-2 text-sm sm:text-base mt-2">
+                            <li>
+                                <FooterLinkButton onClick={() => navigate(View.IMPRINT)} lang="de">Impressum</FooterLinkButton> / <FooterLinkButton onClick={() => navigate(View.IMPRINT)} lang="en">Imprint</FooterLinkButton>
+                            </li>
+                            <li>
+                                <FooterLinkButton onClick={() => navigate(View.PRIVACY)} lang="de">Datenschutzerklärung</FooterLinkButton> / <FooterLinkButton onClick={() => navigate(View.PRIVACY)} lang="en">Privacy&nbsp;Policy</FooterLinkButton>
+                            </li>
+                            <li>
+                                <FooterLinkButton onClick={() => navigate(View.COOKIES)}>Cookie-Einstellungen</FooterLinkButton>
+                            </li>
+                            <li>
+                                <FooterLinkButton onClick={() => navigate(View.TERMS)} lang="de">AGB</FooterLinkButton> / <FooterLinkButton onClick={() => navigate(View.TERMS)} lang="en">Terms&nbsp;&amp;&nbsp;Conditions</FooterLinkButton>
+                            </li>
+                            <li>
+                                <FooterLinkButton onClick={() => navigate(View.WITHDRAWAL)} lang="de">Widerrufsbelehrung</FooterLinkButton> / <FooterLinkButton onClick={() => navigate(View.WITHDRAWAL)} lang="en">Right&nbsp;of&nbsp;Withdrawal</FooterLinkButton>
+                            </li>
+                            <li>
+                                <FooterLinkButton onClick={() => navigate(View.DISPUTE)}>Hinweis Verbraucherstreitbeilegung</FooterLinkButton>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Ayuda Column */}
+                    <div>
+                        <h4 className="text-lg font-bold mb-3">Ayuda</h4>
+                        <ul className="space-y-2 text-sm sm:text-base mt-2">
+                            <li>
+                                <FooterLinkButton onClick={() => navigate(View.FAQ)}>Preguntas frecuentes</FooterLinkButton>
+                            </li>
+                            <li>
+                                <FooterLinkButton onClick={() => navigate(View.CONTACT)}>Contacto</FooterLinkButton>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p className="text-center text-sm opacity-80">
+                    © {new Date().getFullYear()} Orakos. Solo para fines de entretenimiento.
+                </p>
             </div>
         </footer>
     );

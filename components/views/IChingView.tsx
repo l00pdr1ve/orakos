@@ -17,9 +17,9 @@ interface HexagramInfo {
 
 const LoadingSpinner: React.FC = () => (
     <div className="flex flex-col items-center justify-center gap-4 text-center my-8">
-         <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
-         <h2 className="text-2xl font-bold text-text-secondary animate-pulse">Consultando el oráculo...</h2>
-         <p className="text-text-secondary">La sabiduría del I Ching se está revelando.</p>
+        <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+        <h2 className="font-serif text-2xl font-bold text-text-secondary animate-pulse">Consultando el oráculo...</h2>
+        <p className="text-text-secondary">La sabiduría del I Ching se está revelando.</p>
     </div>
 );
 
@@ -78,7 +78,7 @@ const IChingView: React.FC<IChingViewProps> = ({ navigateHome }) => {
         const changingLineIndexes = generatedLines
             .map((line, index) => (line === 6 || line === 9 ? index + 1 : -1))
             .filter(index => index !== -1);
-        
+
         let futureHex: HexagramInfo | null = null;
         if (changingLineIndexes.length > 0) {
             const futureLines = generatedLines.map(line => {
@@ -116,27 +116,27 @@ const IChingView: React.FC<IChingViewProps> = ({ navigateHome }) => {
     const isFormState = !hasConsulted;
 
     const wrapperClasses = `p-6 md:p-10 rounded-xl shadow-lg`;
-    const dynamicWrapperClasses = isFormState 
-        ? 'bg-card/80 backdrop-blur-md border border-border' 
+    const dynamicWrapperClasses = isFormState
+        ? 'bg-card/80 backdrop-blur-md border border-border'
         : 'border border-transparent'; // Transparent border for dark bg
-    const titleClasses = "text-4xl font-bold mb-2 text-center";
+    const titleClasses = "font-serif text-4xl font-bold mb-2 text-center";
     const dynamicTitleClasses = isFormState ? 'text-primary' : 'text-white';
     const descriptionClasses = "mb-8 text-center max-w-2xl mx-auto";
     const dynamicDescriptionClasses = isFormState ? 'text-text-secondary' : 'text-white/80';
-    const formLabelClasses = "block text-sm font-medium text-text-secondary mb-2";
+    const formLabelClasses = "block text-base font-medium text-text-secondary mb-2";
     const inputClasses = "w-full bg-background border border-border rounded-lg p-3 focus:ring-accent focus:border-accent transition text-text-primary";
     const buttonClasses = "w-full md:w-auto bg-accent text-primary font-bold py-3 px-10 rounded-lg hover:opacity-90 transition-opacity shadow-md disabled:bg-accent/50 disabled:cursor-not-allowed";
 
     return (
         <div className="max-w-4xl mx-auto animate-fade-in">
-             <button onClick={navigateHome} className="mb-8 text-text-primary hover:opacity-80 transition-opacity">&larr; Volver al inicio</button>
-            <div 
+            <button onClick={navigateHome} className="mb-8 text-text-primary hover:opacity-80 transition-opacity">&larr; Volver al inicio</button>
+            <div
                 className={`${wrapperClasses} ${dynamicWrapperClasses}`}
                 style={!isFormState ? {
-                  backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://upload.wikimedia.org/wikipedia/commons/2/24/Gfp-blue-chinese-traditional-fabric.jpg')`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
+                    backgroundImage: `linear-gradient(rgba(27, 29, 59, 0.7), rgba(27, 29, 59, 0.7)), url('https://upload.wikimedia.org/wikipedia/commons/2/24/Gfp-blue-chinese-traditional-fabric.jpg')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
                 } : {}}
             >
                 <h1 className={`${titleClasses} ${dynamicTitleClasses}`}>Oráculo del I Ching</h1>
@@ -159,7 +159,7 @@ const IChingView: React.FC<IChingViewProps> = ({ navigateHome }) => {
                         </div>
                         <div>
                             <label htmlFor="question" className={formLabelClasses}>Tu pregunta:</label>
-                             <textarea
+                            <textarea
                                 id="question"
                                 rows={3}
                                 value={question}
@@ -179,8 +179,8 @@ const IChingView: React.FC<IChingViewProps> = ({ navigateHome }) => {
                     <div>
                         {isLoading && <LoadingSpinner />}
                         {!isLoading && interpretation && (
-                             <div className="animate-fade-in text-white">
-                                <h2 className="text-2xl font-bold text-center text-white/80 mb-2">La respuesta del oráculo a tu pregunta:</h2>
+                            <div className="animate-fade-in text-white">
+                                <h2 className="font-serif text-2xl font-bold text-center text-white/80 mb-2">La respuesta del oráculo a tu pregunta:</h2>
                                 <p className="text-center text-white/90 font-semibold mb-6 italic">"{question}"</p>
 
                                 <div className="flex flex-wrap justify-center items-start gap-8 mb-8">
@@ -188,18 +188,18 @@ const IChingView: React.FC<IChingViewProps> = ({ navigateHome }) => {
                                     {futureHexagram && (
                                         <>
                                             <div className="self-center text-4xl text-white animate-pulse">&rarr;</div>
-                                            <HexagramDisplay lines={lines.map(l => (l === 6 ? 7 : l === 9 ? 8 : l) as LineValue)} name={futureHexagram.name} number={futureHexagram.number} theme="dark"/>
+                                            <HexagramDisplay lines={lines.map(l => (l === 6 ? 7 : l === 9 ? 8 : l) as LineValue)} name={futureHexagram.name} number={futureHexagram.number} theme="dark" />
                                         </>
                                     )}
                                 </div>
-                                
+
                                 <div className="bg-deep-night/50 p-6 md:p-8 rounded-lg shadow-inner">
-                                    <div className="prose prose-lg max-w-none text-white prose-headings:text-white prose-p:text-white/90 prose-strong:text-white prose-li:text-white/90 prose-ul:text-white/90">
+                                    <div className="prose prose-lg max-w-none text-white prose-headings:font-serif prose-headings:text-white prose-p:text-white/90 prose-strong:text-white prose-li:text-white/90 prose-ul:text-white/90">
                                         <ReactMarkdown>{interpretation}</ReactMarkdown>
                                     </div>
                                 </div>
-                                
-                                <SendToEmail content={interpretation} theme="dark"/>
+
+                                <SendToEmail content={interpretation} theme="dark" />
 
                                 <div className="text-center mt-8">
                                     <button onClick={handleReset} className="bg-accent text-primary font-bold py-2 px-8 rounded-lg hover:opacity-80 transition-opacity">
@@ -208,7 +208,7 @@ const IChingView: React.FC<IChingViewProps> = ({ navigateHome }) => {
                                 </div>
                             </div>
                         )}
-                         {!isLoading && error && <p className="text-red-400 text-center mt-4">{error}</p>}
+                        {!isLoading && error && <p className="text-red-400 text-center mt-4">{error}</p>}
                     </div>
                 )}
             </div>

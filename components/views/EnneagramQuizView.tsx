@@ -38,16 +38,16 @@ const EnneagramQuizView: React.FC<EnneagramQuizViewProps> = ({ setEnneagramData,
     return (
         <div className="max-w-3xl mx-auto animate-fade-in">
             <button onClick={() => navigate(View.HOME)} className="mb-8 text-text-primary hover:opacity-80 transition-opacity">&larr; Volver al inicio</button>
-            <div 
-                className="bg-card/80 backdrop-blur-md p-8 md:p-12 rounded-xl shadow-lg border border-border"
+            <div
+                className="bg-card/80 backdrop-blur-md p-6 md:p-10 rounded-xl shadow-lg border border-border"
             >
-                <h1 className="text-4xl font-bold text-primary mb-2 text-center">Descubre tu Eneagrama</h1>
+                <h1 className="font-serif text-4xl font-bold text-primary mb-2 text-center">Descubre tu Eneagrama</h1>
                 <p className="text-text-secondary mb-8 text-center">Responde honestamente a las siguientes afirmaciones para obtener un perfil de tu personalidad.</p>
-                
+
                 {step === 0 && (
-                     <form onSubmit={handleNameSubmit} className="space-y-6">
+                    <form onSubmit={handleNameSubmit} className="space-y-6">
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-2">Primero, dinos tu nombre:</label>
+                            <label htmlFor="name" className="block text-base font-medium text-text-secondary mb-2">Primero, dinos tu nombre:</label>
                             <input type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} required className="w-full bg-background border border-border rounded-lg p-3 focus:ring-accent focus:border-accent transition placeholder:text-text-secondary text-text-primary" placeholder="Tu nombre" />
                         </div>
                         {error && <p className="text-red-600 text-center">{error}</p>}
@@ -62,7 +62,7 @@ const EnneagramQuizView: React.FC<EnneagramQuizViewProps> = ({ setEnneagramData,
                 {step === 1 && (
                     <form onSubmit={handleSubmit} className="space-y-8">
                         {ENNEAGRAM_QUESTIONS.map((question, index) => (
-                            <div key={index} className="bg-background p-4 rounded-lg border border-border">
+                            <div key={index} className="bg-background p-6 rounded-lg border border-border">
                                 <p className="text-lg text-text-primary mb-4 text-center">{`"${question}"`}</p>
                                 <div className="flex justify-center gap-4">
                                     <button
@@ -82,7 +82,7 @@ const EnneagramQuizView: React.FC<EnneagramQuizViewProps> = ({ setEnneagramData,
                                 </div>
                             </div>
                         ))}
-                         <div className="text-center pt-4">
+                        <div className="text-center pt-4">
                             <button type="submit" className="w-full md:w-auto bg-accent text-primary font-bold py-3 px-10 rounded-lg hover:opacity-90 transition-opacity shadow-md hover:shadow-lg">
                                 Ver mi Perfil
                             </button>

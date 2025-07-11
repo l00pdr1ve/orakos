@@ -11,9 +11,9 @@ interface NumerologyDisplayViewProps {
 
 const LoadingSpinner: React.FC = () => (
     <div className="flex flex-col items-center justify-center gap-4 text-center">
-         <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
-         <h2 className="text-2xl font-bold text-text-secondary animate-pulse">Calculando tus números...</h2>
-         <p className="text-text-secondary">Tu perfil numerológico se está materializando.</p>
+        <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+        <h2 className="font-serif text-2xl font-bold text-text-secondary animate-pulse">Calculando tus números...</h2>
+        <p className="text-text-secondary">Tu perfil numerológico se está materializando.</p>
     </div>
 );
 
@@ -53,17 +53,17 @@ const NumerologyDisplayView: React.FC<NumerologyDisplayViewProps> = ({ numerolog
         if (error) {
             return (
                 <div className="text-center text-red-800 bg-red-100 border border-red-300 p-8 rounded-lg">
-                    <h2 className="text-2xl font-bold text-red-800 mb-2">Error al generar el perfil</h2>
+                    <h2 className="font-serif text-2xl font-bold text-red-800 mb-2">Error al generar el perfil</h2>
                     <p>{error}</p>
                 </div>
             )
         }
-        
+
         return (
             <div className="bg-background p-6 md:p-8 rounded-lg shadow-inner">
-               <div className="prose prose-lg max-w-none prose-headings:text-primary prose-p:text-text-primary prose-strong:text-primary prose-li:text-text-primary prose-ul:text-text-primary">
+                <div className="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-primary prose-p:text-text-primary prose-strong:text-primary prose-li:text-text-primary prose-ul:text-text-primary">
                     <ReactMarkdown>{reportResult}</ReactMarkdown>
-               </div>
+                </div>
             </div>
         )
     };
@@ -72,14 +72,14 @@ const NumerologyDisplayView: React.FC<NumerologyDisplayViewProps> = ({ numerolog
     return (
         <div className="max-w-4xl mx-auto animate-fade-in">
             <div className="mb-8">
-                 <button onClick={navigateHome} className="text-text-primary hover:opacity-80 transition-opacity">&larr; Volver al inicio</button>
+                <button onClick={navigateHome} className="text-text-primary hover:opacity-80 transition-opacity">&larr; Volver al inicio</button>
             </div>
-            
-            <div className="bg-card p-4 md:p-6 rounded-xl shadow-lg border border-border">
+
+            <div className="bg-card p-6 rounded-xl shadow-lg border border-border">
                 {renderContent()}
             </div>
-             {!isLoading && !error && reportResult && (
-                 <div className="mt-8">
+            {!isLoading && !error && reportResult && (
+                <div className="mt-10">
                     <SendToEmail content={reportResult} initialEmail={numerologyData?.email} />
                     <div className="text-center mt-8">
                         <button onClick={navigateHome} className="bg-accent text-primary font-bold py-3 px-10 rounded-lg hover:opacity-90 transition-opacity shadow-md hover:shadow-lg">

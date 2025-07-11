@@ -13,7 +13,7 @@ const Line: React.FC<{ value: LineValue, theme: 'light' | 'dark' }> = ({ value, 
     const isChanging = value === 6 || value === 9;
 
     const lineBaseClasses = `h-2 transition-all duration-500 ${theme === 'dark' ? 'bg-white/80' : 'bg-text-secondary'}`;
-    
+
     return (
         <div className="relative flex items-center justify-center h-6 group">
             {isBroken ? (
@@ -24,7 +24,7 @@ const Line: React.FC<{ value: LineValue, theme: 'light' | 'dark' }> = ({ value, 
             ) : (
                 <div className={`${lineBaseClasses} w-full group-hover:w-[90%]`}></div>
             )}
-             {isChanging && <div className={`absolute w-2.5 h-2.5 rounded-full animate-pulse ${theme === 'dark' ? 'bg-white' : 'bg-accent'}`}></div>}
+            {isChanging && <div className={`absolute w-2.5 h-2.5 rounded-full animate-pulse ${theme === 'dark' ? 'bg-white' : 'bg-accent'}`}></div>}
         </div>
     );
 };
@@ -46,7 +46,7 @@ const HexagramDisplay: React.FC<HexagramDisplayProps> = ({ lines, name, number, 
                     <Line key={index} value={line} theme={theme} />
                 ))}
             </div>
-            <p className={`${secondaryTextColor} text-xs truncate`}>{name}</p>
+            <p className={`${secondaryTextColor} text-base truncate`}>{name}</p>
         </div>
     );
 };

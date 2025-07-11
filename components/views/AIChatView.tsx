@@ -20,7 +20,7 @@ interface AIChatViewProps {
 }
 
 const SendIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
 );
 
 const AIChatView: React.FC<AIChatViewProps> = ({ navigateHome }) => {
@@ -35,18 +35,26 @@ const AIChatView: React.FC<AIChatViewProps> = ({ navigateHome }) => {
     useEffect(() => {
         const initChat = () => {
             setIsLoading(true);
-            const chatInstance = startTarotChat();
-            setChat(chatInstance);
-            
-            setMessages([{
-                role: 'model',
-                content: `Respira hondo, concéntrate en tu situación y escribe tu pregunta a continuación.`
-            }]);
-            setIsLoading(false);
+            try {
+                const chatInstance = startTarotChat();
+                setChat(chatInstance);
+                setMessages([{
+                    role: 'model',
+                    content: `Respira hondo, concéntrate en tu situación y escribe tu pregunta a continuación.`
+                }]);
+            } catch (error) {
+                console.error("Failed to initialize chat:", error);
+                setMessages([{
+                    role: 'model',
+                    content: "Error de configuración: No se pudo conectar con el servicio de IA. Es posible que la clave de API no esté configurada correctamente. Por favor, contacta al administrador del sitio."
+                }]);
+            } finally {
+                setIsLoading(false);
+            }
         };
         initChat();
     }, []);
-    
+
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -64,7 +72,7 @@ const AIChatView: React.FC<AIChatViewProps> = ({ navigateHome }) => {
         setIsLoading(true);
 
         let promptForModel = currentInput;
-        
+
         // If this is the first question, draw cards and prepend their names to the prompt.
         if (!questionAsked) {
             const cards = shuffleDeck(TAROT_DECK).slice(0, 3);
@@ -76,13 +84,13 @@ const AIChatView: React.FC<AIChatViewProps> = ({ navigateHome }) => {
 
         try {
             const stream = await chat.sendMessageStream({ message: promptForModel });
-            
+
             let currentModelMessage = '';
             setMessages(prev => [...prev, { role: 'model', content: '' }]);
 
             for await (const chunk of stream) {
                 currentModelMessage += chunk.text;
-                 setMessages(prev => {
+                setMessages(prev => {
                     const newMessages = [...prev];
                     newMessages[newMessages.length - 1].content = currentModelMessage;
                     return newMessages;
@@ -98,9 +106,9 @@ const AIChatView: React.FC<AIChatViewProps> = ({ navigateHome }) => {
 
     return (
         <div className="max-w-4xl mx-auto h-full flex flex-col animate-fade-in">
-             <button onClick={navigateHome} className="mb-4 text-text-primary hover:opacity-80 transition-opacity self-start">&larr; Volver al inicio</button>
-            <div 
-                className="bg-card/80 backdrop-blur-md rounded-xl shadow-2xl border border-border flex flex-col flex-grow p-4"
+            <button onClick={navigateHome} className="mb-4 text-text-primary hover:opacity-80 transition-opacity self-start">&larr; Volver al inicio</button>
+            <div
+                className="bg-card/80 backdrop-blur-md rounded-xl shadow-2xl border border-border flex flex-col flex-grow p-6"
             >
                 {drawnCards.length > 0 && <TarotCardDisplay cards={drawnCards} />}
                 <div ref={chatContainerRef} className="flex-grow overflow-y-auto space-y-6 p-4 scroll-smooth">
@@ -108,7 +116,7 @@ const AIChatView: React.FC<AIChatViewProps> = ({ navigateHome }) => {
                         <ChatMessage key={index} message={msg} />
                     ))}
                     {isLoading && messages.length > 0 && messages[messages.length - 1].role === 'user' && (
-                         <div className="flex items-start gap-4 justify-start">
+                        <div className="flex items-start gap-4 justify-start">
                             <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-card">
                                 <div className="w-2 h-2 bg-card rounded-full animate-pulse [animation-delay:-0.3s]"></div>
                                 <div className="w-2 h-2 bg-card rounded-full animate-pulse [animation-delay:-0.15s]"></div>
@@ -120,18 +128,18 @@ const AIChatView: React.FC<AIChatViewProps> = ({ navigateHome }) => {
                         </div>
                     )}
                 </div>
-                <div className="mt-4 border-t border-border pt-4">
+                <div className="mt-6 border-t border-border pt-6">
                     <form onSubmit={handleSendMessage} className="flex items-center gap-3">
                         <input
                             type="text"
                             value={userInput}
                             onChange={(e) => setUserInput(e.target.value)}
                             placeholder={isLoading ? "Espera a que Aura responda..." : "Escribe tu pregunta aquí..."}
-                            disabled={isLoading}
+                            disabled={isLoading || !chat}
                             className="w-full bg-background border border-border rounded-lg p-3 focus:ring-accent focus:border-accent transition text-text-primary placeholder:text-text-secondary"
                         />
-                        <button type="submit" disabled={isLoading || !userInput.trim()} className="bg-accent p-3 rounded-full text-primary disabled:bg-accent/50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity">
-                           <SendIcon className="w-6 h-6"/>
+                        <button type="submit" disabled={isLoading || !userInput.trim() || !chat} className="bg-accent p-3 rounded-full text-primary disabled:bg-accent/50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity">
+                            <SendIcon className="w-6 h-6" />
                         </button>
                     </form>
                 </div>

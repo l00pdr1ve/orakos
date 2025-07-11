@@ -35,14 +35,22 @@ const LenormandChatView: React.FC<LenormandChatViewProps> = ({ navigateHome }) =
     useEffect(() => {
         const initChat = () => {
             setIsLoading(true);
-            const chatInstance = startLenormandChat();
-            setChat(chatInstance);
-
-            setMessages([{
-                role: 'model',
-                content: `El oráculo de Lenormand ofrece respuestas claras y directas. Enfoca tu mente y escribe tu pregunta.`
-            }]);
-            setIsLoading(false);
+            try {
+                const chatInstance = startLenormandChat();
+                setChat(chatInstance);
+                setMessages([{
+                    role: 'model',
+                    content: `El oráculo de Lenormand ofrece respuestas claras y directas. Enfoca tu mente y escribe tu pregunta.`
+                }]);
+            } catch (error) {
+                console.error("Failed to initialize chat:", error);
+                setMessages([{
+                    role: 'model',
+                    content: "Error de configuración: No se pudo conectar con el servicio de IA. Es posible que la clave de API no esté configurada correctamente. Por favor, contacta al administrador del sitio."
+                }]);
+            } finally {
+                setIsLoading(false);
+            }
         };
         initChat();
     }, []);
@@ -126,10 +134,10 @@ const LenormandChatView: React.FC<LenormandChatViewProps> = ({ navigateHome }) =
                             value={userInput}
                             onChange={(e) => setUserInput(e.target.value)}
                             placeholder={isLoading ? "Espera a que Aura responda..." : "Escribe tu pregunta aquí..."}
-                            disabled={isLoading}
+                            disabled={isLoading || !chat}
                             className="w-full bg-background border border-border rounded-lg p-3 focus:ring-accent focus:border-accent transition text-text-primary placeholder:text-text-secondary"
                         />
-                        <button type="submit" disabled={isLoading || !userInput.trim()} className="bg-accent p-3 rounded-full text-primary disabled:bg-accent/50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity">
+                        <button type="submit" disabled={isLoading || !userInput.trim() || !chat} className="bg-accent p-3 rounded-full text-primary disabled:bg-accent/50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity">
                             <SendIcon className="w-6 h-6" />
                         </button>
                     </form>
