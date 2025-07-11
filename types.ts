@@ -50,6 +50,7 @@ export interface TarotCard {
 export interface LenormandCard {
   name: string;
   number: number;
+  imageUrl: string;
 }
 
 
