@@ -1,13 +1,34 @@
 import { GoogleGenAI, Chat } from "@google/genai";
 import { TarotCard, AstralChartData, NumerologyData, EnneagramData, DreamData, ReadingFocus } from '../types';
 
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
+// Use a lazy-initialized singleton pattern for the AI instance.
+// This prevents errors on module load and ensures the API key is read at runtime.
+let ai: GoogleGenAI | null = null;
+
+function getAiInstance(): GoogleGenAI {
+    // If the instance already exists, return it.
+    if (ai) {
+        return ai;
+    }
+
+    // Check for the API key from environment variables.
+    // Vite replaces `import.meta.env.VITE_GEMINI_API_KEY` with the actual value at build time.
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+    // If the key is not found, throw a clear error. This will be caught by the calling functions.
+    if (!apiKey) {
+        console.error("VITE_GEMINI_API_KEY is not defined. The application will not work correctly.");
+        throw new Error("API key for Gemini is missing. Please check the deployment configuration.");
+    }
+
+    // Create and cache the new instance.
+    ai = new GoogleGenAI({ apiKey });
+    return ai;
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const startTarotChat = (): Chat => {
+    const aiInstance = getAiInstance();
     const systemInstruction = `Eres 'Aura', una tarotista de IA directa, concisa y honesta que se comunica en español de España. Tu tono es franco y vas directamente al grano pero siendo empática. Tus lecturas se basan únicamente en las tres cartas que la persona te presentará junto con su pregunta.
 
 Tu respuesta DEBE seguir esta estructura estricta:
@@ -28,7 +49,7 @@ Tu respuesta DEBE seguir esta estructura estricta:
 - No respondas preguntas sobre salud o sobre deseos que alguien muera, o sobre la muerte de otras personas. Solo responde preguntas que sean sobre quien te está preguntando, no terceros.
 - Si te preguntan si alguien tiene mal de ojo, hechizos, o mágia negra, se evasiva con la respuesta.`;
 
-    const chat = ai.chats.create({
+    const chat = aiInstance.chats.create({
         model: 'gemini-2.5-flash',
         config: {
             systemInstruction: systemInstruction,
@@ -41,6 +62,7 @@ Tu respuesta DEBE seguir esta estructura estricta:
 };
 
 export const startLenormandChat = (): Chat => {
+    const aiInstance = getAiInstance();
     const systemInstruction = `Eres 'Aura', una experta en el oráculo de Lenormand. Te comunicas en español de España de forma directa, práctica y sin rodeos. El sistema Lenormand es conocido por sus respuestas concretas. Tus lecturas se basan únicamente en las tres cartas que se te presentan.
 
 Tu respuesta DEBE seguir esta estructura narrativa y estricta:
@@ -59,7 +81,7 @@ Tu respuesta DEBE seguir esta estructura narrativa y estricta:
 - Al dirigirte a la persona que consulta, utiliza siempre un lenguaje de género neutro.
 - No incluyas ningún descargo de responsabilidad.`;
 
-    const chat = ai.chats.create({
+    const chat = aiInstance.chats.create({
         model: 'gemini-2.5-flash',
         config: {
             systemInstruction: systemInstruction,
@@ -109,7 +131,8 @@ Un párrafo final que resuma los temas principales de la carta. Ofrece una guía
 Utiliza un lenguaje claro y accesible, evitando la jerga astrológica excesivamente técnica. No incluyas ningún descargo de responsabilidad.`;
 
     try {
-        const response = await ai.models.generateContent({
+        const aiInstance = getAiInstance();
+        const response = await aiInstance.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
             config: {
@@ -188,7 +211,8 @@ Describe el hexagrama ${futureHexagram.name}. Esto representa hacia dónde se di
 Concluye con un resumen claro y práctico. Sintetiza toda la información para dar una respuesta directa y una guía accionable a la pregunta realizada, centrada en el área de interés de la persona.`;
 
     try {
-        const response = await ai.models.generateContent({
+        const aiInstance = getAiInstance();
+        const response = await aiInstance.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
             config: {
@@ -239,7 +263,8 @@ Un párrafo final que resuma las interacciones entre estos números clave. Ofrec
 Utiliza un lenguaje claro y accesible. No incluyas ningún descargo de responsabilidad.`;
 
     try {
-        const response = await ai.models.generateContent({
+        const aiInstance = getAiInstance();
+        const response = await aiInstance.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
             config: {
@@ -291,7 +316,8 @@ Un párrafo final muy corto (2-3 frases) que resuma la esencia de su perfil.
 Sé claro, profundo y extremadamente breve. No incluyas ningún descargo de responsabilidad.`;
 
     try {
-        const response = await ai.models.generateContent({
+        const aiInstance = getAiInstance();
+        const response = await aiInstance.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
             config: {
@@ -330,7 +356,8 @@ Concluye con 2-3 preguntas abiertas que inviten a la persona a reflexionar sobre
 Mantén un tono de guía, no de predicción. No incluyas ningún descargo de responsabilidad.`;
 
     try {
-        const response = await ai.models.generateContent({
+        const aiInstance = getAiInstance();
+        const response = await aiInstance.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
             config: {
