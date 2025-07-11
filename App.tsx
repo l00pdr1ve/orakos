@@ -16,7 +16,7 @@ import DreamInterpretationFormView from './components/views/DreamInterpretationF
 import DreamInterpretationDisplayView from './components/views/DreamInterpretationDisplayView';
 import HumanBookingView from './components/views/HumanBookingView';
 import LegalView from './components/views/LegalView';
-import { legalContent } from './constants/legalContent';
+import { legalContent } from './constants/legalContent.ts';
 
 
 // Centralized background image management
