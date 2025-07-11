@@ -1,21 +1,21 @@
 import React, { useState, useCallback } from 'react';
-import { View, AstralChartData, NumerologyData, EnneagramData, DreamData, Language } from './types';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import HomeView from './components/views/HomeView';
-import AIChatView from './components/views/AIChatView';
-import LenormandChatView from './components/views/LenormandChatView';
-import AstralChartFormView from './components/views/AstralChartFormView';
-import AstralChartDisplayView from './components/views/AstralChartDisplayView';
-import IChingView from './components/views/IChingView';
-import NumerologyFormView from './components/views/NumerologyFormView';
-import NumerologyDisplayView from './components/views/NumerologyDisplayView';
-import EnneagramQuizView from './components/views/EnneagramQuizView';
-import EnneagramDisplayView from './components/views/EnneagramDisplayView';
-import DreamInterpretationFormView from './components/views/DreamInterpretationFormView';
-import DreamInterpretationDisplayView from './components/views/DreamInterpretationDisplayView';
-import HumanBookingView from './components/views/HumanBookingView';
-import LegalView from './components/views/LegalView';
+import { View, AstralChartData, NumerologyData, EnneagramData, DreamData, Language } from './types.ts';
+import Header from './components/Header.tsx';
+import Footer from './components/Footer.tsx';
+import HomeView from './components/views/HomeView.tsx';
+import AIChatView from './components/views/AIChatView.tsx';
+import LenormandChatView from './components/views/LenormandChatView.tsx';
+import AstralChartFormView from './components/views/AstralChartFormView.tsx';
+import AstralChartDisplayView from './components/views/AstralChartDisplayView.tsx';
+import IChingView from './components/views/IChingView.tsx';
+import NumerologyFormView from './components/views/NumerologyFormView.tsx';
+import NumerologyDisplayView from './components/views/NumerologyDisplayView.tsx';
+import EnneagramQuizView from './components/views/EnneagramQuizView.tsx';
+import EnneagramDisplayView from './components/views/EnneagramDisplayView.tsx';
+import DreamInterpretationFormView from './components/views/DreamInterpretationFormView.tsx';
+import DreamInterpretationDisplayView from './components/views/DreamInterpretationDisplayView.tsx';
+import HumanBookingView from './components/views/HumanBookingView.tsx';
+import LegalView from './components/views/LegalView.tsx';
 import { legalContent } from './constants/legalContent.ts';
 
 
