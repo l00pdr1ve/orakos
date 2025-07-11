@@ -11,6 +11,29 @@ export enum View {
   DREAM_INTERPRETATION_FORM,
   DREAM_INTERPRETATION_DISPLAY,
   HUMAN_BOOKING,
+  LENORMAND_READING,
+  // Legal & Help Pages
+  IMPRINT,
+  PRIVACY,
+  COOKIES,
+  TERMS,
+  WITHDRAWAL,
+  DISPUTE,
+  FAQ,
+  CONTACT,
+}
+
+export type Language = 'es' | 'en';
+
+export interface MultilingualText {
+  de: string;
+  es: string;
+  en: string;
+}
+
+export interface LegalContent {
+  title: MultilingualText;
+  content: MultilingualText;
 }
 
 export interface ChatMessage {
@@ -23,6 +46,12 @@ export interface TarotCard {
   arcana: 'Major' | 'Minor';
   imageName: string;
 }
+
+export interface LenormandCard {
+  name: string;
+  number: number;
+}
+
 
 export type ReadingFocus = 'General' | 'Amor' | 'Dinero';
 

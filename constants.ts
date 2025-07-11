@@ -1,5 +1,5 @@
 
-import { TarotCard } from './types';
+import { TarotCard, LenormandCard } from './types';
 
 export const TAROT_DECK: TarotCard[] = [
     { name: 'El Loco', arcana: 'Major', imageName: 'the-fool' },
@@ -80,4 +80,44 @@ export const TAROT_DECK: TarotCard[] = [
     { name: 'Caballero de Oros', arcana: 'Minor', imageName: 'knight-of-pentacles' },
     { name: 'Reina de Oros', arcana: 'Minor', imageName: 'queen-of-pentacles' },
     { name: 'Rey de Oros', arcana: 'Minor', imageName: 'king-of-pentacles' },
+];
+
+
+export const LENORMAND_DECK: LenormandCard[] = [
+    { name: 'El Jinete', number: 1 },
+    { name: 'El Trébol', number: 2 },
+    { name: 'El Barco', number: 3 },
+    { name: 'La Casa', number: 4 },
+    { name: 'El Árbol', number: 5 },
+    { name: 'Las Nubes', number: 6 },
+    { name: 'La Serpiente', number: 7 },
+    { name: 'El Ataúd', number: 8 },
+    { name: 'El Ramo', number: 9 },
+    { name: 'La Guadaña', number: 10 },
+    { name: 'Las Varas', number: 11 },
+    { name: 'Los Pájaros', number: 12 },
+    { name: 'La Niña', number: 13 },
+    { name: 'El Zorro', number: 14 },
+    { name: 'El Oso', number: 15 },
+    { name: 'La Estrella', number: 16 },
+    { name: 'La Cigüeña', number: 17 },
+    { name: 'El Perro', number: 18 },
+    { name: 'La Torre', number: 19 },
+    { name: 'El Jardín', number: 20 },
+    { name: 'La Montaña', number: 21 },
+    { name: 'El Camino', number: 22 },
+    { name: 'Los Ratones', number: 23 },
+    { name: 'El Corazón', number: 24 },
+    { name: 'El Anillo', number: 25 },
+    { name: 'El Libro', number: 26 },
+    { name: 'La Carta', number: 27 },
+    { name: 'El Hombre', number: 28 },
+    { name: 'La Mujer', number: 29 },
+    { name: 'Los Lirios', number: 30 },
+    { name: 'El Sol', number: 31 },
+    { name: 'La Luna', number: 32 },
+    { name: 'La Llave', number: 33 },
+    { name: 'Los Peces', number: 34 },
+    { name: 'El Ancla', number: 35 },
+    { name: 'La Cruz', number: 36 },
 ];
